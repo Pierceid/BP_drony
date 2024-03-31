@@ -58,7 +58,6 @@ body {
 
 label {
     width: 90%;
-    padding-inline-end: 8px;
 }
 
 input, select {
@@ -82,13 +81,18 @@ h5 {
 }
 
 table {
+    width: 100%;
     margin-top: 10px;
 }
 
+table th {
+    background-color: lightslategrey;
+}
+
 table tr, table th, table td {
-    min-width: 60px;
+    min-width: 50px;
     width: fit-content;
-    max-width: 120px;
+    max-width: 160px;
     padding: 4px;
     border: 1px solid black;
     font-weight: bold;

@@ -43,10 +43,13 @@ $user = \App\Models\User::getOne($userId);
     <div class="action-buttons">
         <button type="button" class="btn btn-danger profile-btn">
             <a href="<?= $link->url("home.execute", ["option-id" => 3, "user-id" => $userId]) ?>"
-            >Delete account</a>
+            >Delete</a>
         </button>
         <button type="button" class="btn btn-dark profile-btn">
-            <a href="<?= $link->url("home.index") ?>">Back to home</a>
+            <a href="<?= $link->url("user.index") ?>">Log out</a>
+        </button>
+        <button type="button" class="btn btn-success profile-btn">
+            <a href="<?= $link->url("home.index") ?>">Back</a>
         </button>
     </div>
 </div>

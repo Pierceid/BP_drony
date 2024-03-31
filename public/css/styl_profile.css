@@ -35,7 +35,7 @@ body {
     text-align: center;
     font-weight: bold;
     padding: 5px;
-    margin: 5px;
+    margin: 5px 0;
     border: 3px solid black;
     border-radius: 5px;
     background-color: darkgray;
@@ -68,11 +68,13 @@ h4 {
 .action-buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin: 20px 0;
 }
 
 .profile-btn {
-    width: 160px;
-    height: 45px;
+    width: 100%;
+    max-width: 100px;
+    padding: 20px 0;
+    height: 40px;
 }

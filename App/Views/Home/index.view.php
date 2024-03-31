@@ -29,17 +29,17 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             <div class="field">
                 <h5 style="margin-right: 10px">Checkpoints:</h5>
                 <label>
-                    <input name="checkpoints-count" type="number" step="1" min="1" value="<?= $checkpoints ?>">
+                    <input name="checkpoints-count" type="number" step="1" min="1" max="25" value="<?= $checkpoints ?>">
                 </label>
 
-                <h5 style="margin-right: 10px">Drones:</h5>
+                <h5 style="margin-right: 10px; margin-left: 10px">Drones:</h5>
                 <label>
                     <input name="drones-count" type="number" step="1" min="1" max="10" value="<?= $drones ?>">
                 </label>
 
-                <h5 style="margin-right: 10px">Type:</h5>
+                <h5 style="margin-right: 10px; margin-left: 10px">Type:</h5>
                 <label>
-                    <select name="mission-type">
+                    <select name="mission-type" style="padding: 4px 0">
                         <option value="S" <?php echo ($type === 'S') ? 'selected' : '' ?>>Serial</option>
                         <option value="P" <?php echo ($type === 'P') ? 'selected' : '' ?>>Parallel</option>
                     </select>
@@ -51,7 +51,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             <table>
                 <thead>
                 <tr>
-                    <th>Prob.\Point</th>
+                    <th style="width: 160px">Prob.\Point</th>
                     <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
                         <th><?= $j ?>.</th>
                     <?php endfor ?>
@@ -95,7 +95,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             <table>
                 <thead>
                 <tr>
-                    <th>Drone\Point</th>
+                    <th style="width: 160px">Drone\Point</th>
                     <?php for ($i = 0; $i < $checkpoints; $i++) : ?>
                         <th>P(<?= $i ?>)</th>
                     <?php endfor ?>
@@ -105,14 +105,12 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <tbody>
                 <?php for ($i = 0; $i < $drones; $i++) : ?>
                     <tr>
-                        <td>
-                            <h6 style="display:inline;"><?= $i ?>.</h6>
-                        </td>
+                        <th>D(<?= $i ?>)</<th>
 
                         <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
                             <td>
                                 <label>
-                                    <select name="has-<?= $i ?>-<?= $j ?>">
+                                    <select name="has-<?= $i ?>-<?= $j ?>" style="padding: 4px 0">
                                         <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>
                                             0
                                         </option>
