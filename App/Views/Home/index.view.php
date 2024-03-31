@@ -61,7 +61,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <tbody>
                 <?php for ($i = 0; $i < 3; $i++) : ?>
                     <tr>
-                        <th>P(<?= $i ?>)</th>
+                        <th>p(<?= $i ?>)</th>
                         <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
                             <td>
                                 <?php if ($i === 0) : ?>
