@@ -3,6 +3,7 @@
 namespace App\Auth;
 
 use App\Core\IAuthenticator;
+use App\Models\User;
 
 /**
  * Class DummyAuthenticator
@@ -24,20 +25,40 @@ class DummyAuthenticator implements IAuthenticator
     }
 
     /**
-     * Verify, if the user is in DB and has his password is correct
+     * Verify, if the user is already in DB
      * @param $login
+     * @param $email
+     * @return bool
+     * @throws \Exception
+     */
+    public function register($login, $email): bool
+    {
+        $users = User::getAll();
+        foreach ($users as $user) {
+            if ($user->getEmail() == $email || $user->getLogin() == $login) {
+                return false;
+            }
+        }
+        $_SESSION['user'] = $login;
+        return true;
+    }
+
+    /**
+     * @param $email
      * @param $password
      * @return bool
      * @throws \Exception
      */
-    public function login($login, $password): bool
+    public function login($email, $password): bool
     {
-        if ($login == self::LOGIN && password_verify($password, self::PASSWORD_HASH)) {
-            $_SESSION['user'] = self::USERNAME;
-            return true;
-        } else {
-            return false;
+        $users = User::getAll();
+        foreach ($users as $user) {
+            if ($user->getEmail() == $email && password_verify($password, $user->getPassword())) {
+                $_SESSION['user'] = $user->getLogin();
+                return true;
+            }
         }
+        return false;
     }
 
     /**

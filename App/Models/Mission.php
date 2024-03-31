@@ -1,6 +1,10 @@
 <?php
 
-class Mission extends \App\Core\Model
+namespace App\Models;
+
+use App\Core\Model;
+
+class Mission extends Model
 {
     protected ?int $id = null;
     protected ?int $drones;

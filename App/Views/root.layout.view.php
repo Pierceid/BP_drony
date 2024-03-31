@@ -24,7 +24,7 @@ $layout = "root"
     <div class="container-fluid navbar-container">
         <a href="<?= $link->url("home.index") ?>"><img src="/public/images/drone.png" alt=""></a>
 
-        <a class="navbar-brand" href="<?= $link->url("shop.index") ?>">Drone missions</a>
+        <a class="navbar-brand" href="<?= $link->url("home.index") ?>">Drone missions</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,8 +35,8 @@ $layout = "root"
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link active" href="<?= $link->url('home.profile') ?>">Profile</a>
                 </li>
-                <li class="nav-item"><a class="nav-link active" href="<?= $link->url('home.index') ?>">Shop</a></li>
-                <li class="nav-item"><a class="nav-link active" href="<?= $link->url('home.cart') ?>">Cart</a></li>
+                <li class="nav-item"><a class="nav-link active" href="<?= $link->url('home.database') ?>">Database</a>
+                </li>
             </ul>
         </div>
     </div>

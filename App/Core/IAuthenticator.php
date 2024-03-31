@@ -10,12 +10,20 @@ namespace App\Core;
 interface IAuthenticator
 {
     /**
-     * Perform user login
+     * Perform user registration
      * @param $login
+     * @param $email
+     * @return bool
+     */
+    public function register($login, $email): bool;
+
+    /**
+     * Perform user login
+     * @param $email
      * @param $password
      * @return bool
      */
-    public function login($login, $password): bool;
+    public function login($email, $password): bool;
 
     /**
      * Perform user login

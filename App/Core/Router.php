@@ -27,7 +27,7 @@ class Router
     }
 
     /**
-     * Returns a full controller name (with their namespace path) from an URL (Home controller as default)
+     * Returns a full controller name (with their namespace path) from an URL (User controller as default)
      * @return string
      */
     public function getFullControllerName(): string
@@ -36,12 +36,12 @@ class Router
     }
 
     /**
-     * Returns a controller name from a URL (Home controller action by default)
+     * Returns a controller name from a URL (User controller action by default)
      * @return string
      */
     public function getControllerName(): string
     {
-        return (!isset($_GET['c']) || empty(trim(@$_GET['c']))) ? "Home" : trim(ucfirst($_GET['c']));
+        return (!isset($_GET['c']) || empty(trim(@$_GET['c']))) ? "User" : trim(ucfirst($_GET['c']));
     }
 
     /**
@@ -54,7 +54,7 @@ class Router
     }
 
     /**
-     * Returns a controller instance of from a URL (Home controller as default)
+     * Returns a controller instance of from a URL (User controller as default)
      * @return mixed
      */
     public function getController()

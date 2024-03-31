@@ -37,12 +37,11 @@ input {
 
 .form {
     z-index: 2;
-    position: absolute;
+    position: relative;
     top: 15%;
     left: 50%;
     transform: translate(-50%);
     width: fit-content;
-    max-width: 800px;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -94,6 +93,13 @@ input {
 .btn-submit:is(:hover, :active),
 .action-buttons .btn:is(:hover, :active) {
     transform: scale(1.05);
+}
+
+.field {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-items: center;
 }
 
 .search-field {
