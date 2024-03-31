@@ -1,0 +1,199 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Montserrat, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(-90deg, rebeccapurple, darkgrey);
+}
+
+.error-message {
+    color: red;
+}
+
+.title {
+    font-size: xx-large;
+    font-weight: bold;
+    padding: 10px 0;
+}
+
+.container {
+    border-radius: 20px;
+    box-shadow: 0 10px 20px;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+    min-height: 500px;
+    padding: 10px;
+    letter-spacing: 1px;
+    background-color: whitesmoke;
+}
+
+.container button {
+    color: whitesmoke;
+    background-color: purple;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: medium;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 5px 10px;
+}
+
+.container button:is(:hover, :focus) {
+    transform: scale(1.15);
+}
+
+.toggle-container .btn-hidden {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+.container form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+}
+
+.container input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: lightgrey;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: space-evenly;
+    padding: 5px;
+    background-color: whitesmoke;
+    transition: all 1s ease-in-out;
+}
+
+.form-container span, .title, .btn-submit, .btn-hidden {
+    margin: 10px 0;
+}
+
+.container .sign-in {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.register-mode .sign-in {
+    transform: translateX(100%);
+}
+
+.container .sign-up {
+    left: 0;
+    width: 50%;
+    z-index: 1;
+    opacity: 0;
+}
+
+.container.register-mode .sign-up {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 3;
+    animation: move 1s;
+}
+
+.toggle-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 100px 0 0 100px;
+    transition: all 1s ease-in-out;
+    z-index: 5;
+}
+
+.container.register-mode .toggle-container {
+    transform: translateX(-100%);
+    border-radius: 0 100px 100px 0;
+}
+
+.toggle-container img {
+    width: 100%;
+    max-width: 350px;
+    height: 40%;
+    max-height: 250px;
+}
+
+.toggle-container .toggle {
+    position: relative;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    color: white;
+    background: linear-gradient(90deg, blue, darkblue);
+    transform: translateX(0);
+    transition: all 1s ease-in-out;
+}
+
+.container.register-mode .toggle-container .toggle {
+    transform: translateX(50%);
+}
+
+.toggle-container .toggle-panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: all 1s ease-in-out;
+}
+
+.toggle-container .left-panel {
+    transform: translateX(-200%);
+}
+
+.container.register-mode .toggle-container .left-panel {
+    transform: translateX(0);
+}
+
+.toggle-container .right-panel {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.register-mode .toggle-container .right-panel {
+    transform: translateX(200%);
+}
+
+/* Animations */
+@keyframes move {
+    from {
+        opacity: 0;
+        z-index: 1;
+    }
+    to {
+        opacity: 1;
+        z-index: 3;
+    }
+}

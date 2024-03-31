@@ -6,6 +6,7 @@
  */
 ?>
 
+<link rel="stylesheet" href="/public/css/styl_home.css">
 <link rel="stylesheet" href="/public/css/styl_message.css">
 
 <?php

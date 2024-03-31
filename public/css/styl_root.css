@@ -34,29 +34,3 @@
 .web-content {
     width: 100%;
 }
-
-.field {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-items: center;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-table {
-    margin: 10px;
-}
-
-table tr, table th, table td {
-    min-width: 100px;
-    border: 1px solid black;
-    font-weight: bold;
-    font-size: large;
-    width: fit-content;
-    padding: 5px;
-}
-
-select {
-    padding: 4px 0;
-}

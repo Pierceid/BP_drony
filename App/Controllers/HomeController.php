@@ -287,6 +287,8 @@ class HomeController extends AControllerBase
 
     private function validateTracks(): array
     {
+        //TODO probably change the validation style
+
         $formData = $this->app->getRequest();
         $drones = $formData->getValue("drones-count");
         $checkpoints = $formData->getValue("checkpoints-count");

@@ -19,6 +19,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
 ?>
 
 <link rel="stylesheet" href="/public/css/styl_message.css">
+<link rel="stylesheet" href="/public/css/styl_home.css">
 
 <div class="container-fluid">
     <form class="form" method="post" enctype="multipart/form-data">
@@ -26,17 +27,17 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
 
         <?php if ($step >= 0) : ?>
             <div class="field">
-                <h6 style="margin-right: 10px">Checkpoints:</h6>
+                <h5 style="margin-right: 10px">Checkpoints:</h5>
                 <label>
                     <input name="checkpoints-count" type="number" step="1" min="1" value="<?= $checkpoints ?>">
                 </label>
 
-                <h6 style="margin-right: 10px">Drones:</h6>
+                <h5 style="margin-right: 10px">Drones:</h5>
                 <label>
                     <input name="drones-count" type="number" step="1" min="1" max="10" value="<?= $drones ?>">
                 </label>
 
-                <h6 style="margin-right: 10px">Type:</h6>
+                <h5 style="margin-right: 10px">Type:</h5>
                 <label>
                     <select name="mission-type">
                         <option value="S" <?php echo ($type === 'S') ? 'selected' : '' ?>>Serial</option>
@@ -50,34 +51,34 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             <table>
                 <thead>
                 <tr>
-                    <th>Point</th>
-                    <th>P(0)</th>
-                    <th>P(1)</th>
-                    <th>P(2)</th>
+                    <th>Prob.\Point</th>
+                    <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
+                        <th><?= $j ?>.</th>
+                    <?php endfor ?>
                 </tr>
                 </thead>
 
                 <tbody>
-                <?php for ($i = 0; $i < $checkpoints; $i++) : ?>
+                <?php for ($i = 0; $i < 3; $i++) : ?>
                     <tr>
-                        <td>
-                            <h6 style="display:inline;"><?= $i ?>.</h6>
-                        </td>
-                        <td>
-                            <label style="display:inline;">
-                                <input name="fault-point-<?= $i ?>" type="number" step="any" min="0" max="1"
-                                       placeholder="P(0)" value="<?= $points[$i][0] ?? 0 ?>">
-                            </label>
-                        </td>
-                        <td>
-                            <label style="display:inline;">
-                                <input name="acceptable-point-<?= $i ?>" type="number" step="any" min="0" max="1"
-                                       placeholder="P(1)" value="<?= $points[$i][1] ?? 0 ?>">
-                            </label>
-                        </td>
-                        <td>
-                            <h6 style="display:inline;"><?= $points[$i][2] ?? 0 ?></h6>
-                        </td>
+                        <th>P(<?= $i ?>)</th>
+                        <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
+                            <td>
+                                <?php if ($i === 0) : ?>
+                                    <label style="display:inline;">
+                                        <input name="fault-point-<?= $j ?>" type="number" step="any" min="0" max="1"
+                                               placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
+                                    </label>
+                                <?php elseif ($i === 1) : ?>
+                                    <label style="display:inline;">
+                                        <input name="acceptable-point-<?= $j ?>" type="number" step="any" min="0" max="1"
+                                               placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
+                                    </label>
+                                <?php elseif ($i === 2) : ?>
+                                    <h6 style="display:inline;"><?= $points[$j][$i] ?? 0 ?></h6>
+                                <?php endif ?>
+                            </td>
+                        <?php endfor ?>
                     </tr>
                 <?php endfor ?>
                 </tbody>
@@ -94,7 +95,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             <table>
                 <thead>
                 <tr>
-                    <th>Drone</th>
+                    <th>Drone\Point</th>
                     <?php for ($i = 0; $i < $checkpoints; $i++) : ?>
                         <th>P(<?= $i ?>)</th>
                     <?php endfor ?>
@@ -112,8 +113,12 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                             <td>
                                 <label>
                                     <select name="has-<?= $i ?>-<?= $j ?>">
-                                        <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>0</option>
-                                        <option value="1" <?php echo (($tracks[$i][$j] ?? 0) === '1') ? 'selected' : '' ?>>1</option>
+                                        <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>
+                                            0
+                                        </option>
+                                        <option value="1" <?php echo (($tracks[$i][$j] ?? 0) === '1') ? 'selected' : '' ?>>
+                                            1
+                                        </option>
                                     </select>
                                 </label>
                             </td>
