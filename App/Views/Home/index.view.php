@@ -71,7 +71,8 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                                     </label>
                                 <?php elseif ($i === 1) : ?>
                                     <label style="display:inline;">
-                                        <input name="acceptable-point-<?= $j ?>" type="number" step="any" min="0" max="1"
+                                        <input name="acceptable-point-<?= $j ?>" type="number" step="any" min="0"
+                                               max="1"
                                                placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
                                     </label>
                                 <?php elseif ($i === 2) : ?>
@@ -105,21 +106,24 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <tbody>
                 <?php for ($i = 0; $i < $drones; $i++) : ?>
                     <tr>
-                        <th>D(<?= $i ?>)</<th>
+                        <th>D(<?= $i ?>)</
+                        <th>
 
-                        <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
-                            <td>
-                                <label>
-                                    <select name="has-<?= $i ?>-<?= $j ?>" style="padding: 4px 0">
-                                        <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>
-                                            0
-                                        </option>
-                                        <option value="1" <?php echo (($tracks[$i][$j] ?? 0) === '1') ? 'selected' : '' ?>>
-                                            1
-                                        </option>
-                                    </select>
-                                </label>
-                            </td>
+                            <?php for ($j = 0;
+                            $j < $checkpoints;
+                            $j++) : ?>
+                        <td>
+                            <label>
+                                <select name="has-<?= $i ?>-<?= $j ?>" style="padding: 4px 0">
+                                    <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>
+                                        0
+                                    </option>
+                                    <option value="1" <?php echo (($tracks[$i][$j] ?? 0) === '1') ? 'selected' : '' ?>>
+                                        1
+                                    </option>
+                                </select>
+                            </label>
+                        </td>
                         <?php endfor ?>
                     </tr>
                 <?php endfor ?>
@@ -132,6 +136,8 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <?= $_GET['message-tracks'] ?>
             </h5>
         <?php endif ?>
+
+        <h3><?= $_GET['evaluation'] ?? '0.0' ?></h3>
 
         <div class="action-buttons">
             <button class="btn-submit" type="submit" formaction="<?= $link->url('home.index') ?>">Cancel</button>

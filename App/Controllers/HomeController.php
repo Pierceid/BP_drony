@@ -252,13 +252,16 @@ class HomeController extends AControllerBase
             return $this->redirect($this->url("home.index", $data));
         }
 
+        $evaluation = $this->calculateMissionReliability($tracks['drones'], $tracks['tracks'], $points['points']);
+
         $data = [
             "step" => 3,
             "checkpoints" => $points['checkpoints'],
             "points" => $points['points'],
             "type" => $type,
             "drones" => $tracks['drones'],
-            "tracks" => $tracks['tracks']
+            "tracks" => $tracks['tracks'],
+            "evaluation" => $evaluation
         ];
 
         return $this->redirect($this->url("home.index", $data));
@@ -287,8 +290,6 @@ class HomeController extends AControllerBase
 
     private function validateTracks(): array
     {
-        //TODO probably change the validation style
-
         $formData = $this->app->getRequest();
         $drones = $formData->getValue("drones-count");
         $checkpoints = $formData->getValue("checkpoints-count");
@@ -311,10 +312,54 @@ class HomeController extends AControllerBase
         return ['tracks' => $tracks, 'invalidTracks' => $invalidTracks, 'drones' => $drones];
     }
 
-    private function calculateEvaluation($checkpoints, $points, $type, $drones, $tracks): int
+    public function calculateMissionReliability($drones, $tracks, $points): float
     {
+        $R = [];
+        $commonCheckpoints = $this->findCommonCheckpoints($tracks);
 
-        return 1;
+        for ($i = 0; $i < $drones; $i++) {
+            if (in_array($tracks[$i], $commonCheckpoints)) {
+                $random = mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX;
+                $weight = $random < $points[$i][0] ? $points[$i][0] :
+                    ($random < $points[$i][0] + $points[$i][1] ? $points[$i][1] : $points[$i][2]);
+                $R[] = $weight;
+            }
+        }
+
+        if (!empty($R)) {
+            $R_common = max($R);
+            $R_series = 1.0;
+
+            for ($i = 0; $i < $drones; $i++) {
+                if (!in_array($tracks[$i], $commonCheckpoints)) {
+                    $random = mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX;
+                    $weight = $random < $points[$i][0] ? $points[$i][0] :
+                        ($random < $points[$i][0] + $points[$i][1] ? $points[$i][1] : $points[$i][2]);
+                    $R_series *= $weight;
+                }
+            }
+
+            return $R_common * $R_series;
+        }
+
+        $R_series = 0.0;
+        for ($i = 0; $i < $drones; $i++) {
+            $random = mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX;
+            $weight = $random < $points[$i][0] ? $points[$i][0] :
+                ($random < $points[$i][0] + $points[$i][1] ? $points[$i][1] : $points[$i][2]);
+            $R_series += $weight;
+        }
+
+        return $R_series;
+    }
+
+    public function findCommonCheckpoints($tracks)
+    {
+        $common = [];
+        foreach ($tracks as $track) {
+            $common = isset($common) ? array_intersect($common, $track) : $track;
+        }
+        return $common;
     }
 
     private function findUser(): ?User
