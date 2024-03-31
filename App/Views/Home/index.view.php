@@ -137,7 +137,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             </h5>
         <?php endif ?>
 
-        <h3><?= $_GET['evaluation'] ?? '0.0' ?></h3>
+        <h3>Evaluation: <?= $_GET['evaluation'] ?? '0.0' ?></h3>
 
         <div class="action-buttons">
             <button class="btn-submit" type="submit" formaction="<?= $link->url('home.index') ?>">Cancel</button>

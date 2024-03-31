@@ -19,7 +19,7 @@ body {
 }
 
 .message, .search-field {
-    margin: 10px 0;
+    margin: 8px 0;
 }
 
 .message {
@@ -39,7 +39,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     text-align: center;
-    padding: 10px;
+    padding: 8px;
     border: 3px solid black;
     border-radius: 20px;
     background-color: lightgrey;
@@ -50,18 +50,18 @@ body {
     flex-direction: row;
     justify-items: center;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .btn-submit, .action-buttons .btn, .action-buttons .btn-submit {
     text-align: center;
     justify-content: center;
-    padding: 5px;
-    margin: 10px;
+    padding: 4px;
+    margin: 8px;
     font-weight: bold;
     text-transform: uppercase;
     border: 3px solid black;
-    border-radius: 10px;
+    border-radius: 8px;
     color: whitesmoke;
     background-color: black;
 }
@@ -93,10 +93,10 @@ body {
 }
 
 .search-field {
-    padding: 5px;
-    margin-right: 10px;
+    padding: 4px;
+    margin-right: 8px;
     background-color: whitesmoke;
     outline: none;
-    border-radius: 5px;
+    border-radius: 4px;
     width: fit-content;
 }

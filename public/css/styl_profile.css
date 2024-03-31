@@ -13,9 +13,9 @@ body {
     position: relative;
     width: 75%;
     max-width: 700px;
-    padding: 10px;
+    padding: 8px;
     background-color: lightgrey;
-    border: 5px solid black;
+    border: 3px solid black;
     margin: auto;
 }
 
@@ -25,7 +25,7 @@ body {
     border-radius: 50%;
     width: 150px;
     height: 150px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .field {
@@ -34,10 +34,10 @@ body {
     justify-content: space-between;
     text-align: center;
     font-weight: bold;
-    padding: 5px;
-    margin: 5px 0;
+    padding: 4px;
+    margin: 4px 0;
     border: 3px solid black;
-    border-radius: 5px;
+    border-radius: 4px;
     background-color: darkgray;
 }
 
@@ -45,7 +45,7 @@ h4 {
     text-align: center;
     align-self: center;
     font-weight: bold;
-    margin: 0 10px;
+    margin: 0 8px;
     padding: 0;
 }
 
@@ -53,7 +53,7 @@ h4 {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70px;
+    width: 68px;
     height: 40px;
     font-size: large;
     font-weight: bold;

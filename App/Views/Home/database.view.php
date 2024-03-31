@@ -6,6 +6,7 @@
  */
 ?>
 
+<link rel="stylesheet" href="/public/css/styl_home.css">
 <link rel="stylesheet" href="/public/css/styl_database.css">
 
 <?php
@@ -15,21 +16,21 @@ $missions = $data['missions'] ?? [];
 <div class="container-fluid">
     <div class="row">
         <div class="card">
-            <h1>Users table</h1>
+            <h1>Missions database</h1>
 
             <form class="form" method="post">
                 <div class="search">
-                    <input class="search-field" name="login-field" type="search" placeholder="Login"
-                           aria-label="Search">
-                    <input class="search-field" name="email-field" type="search" placeholder="Email"
-                           aria-label="Search">
+                    <input class="search-field" name="login-field" type="search" placeholder="ID"
+                           aria-label="Search" style="padding: 8px">
+
                     <label>
-                        <select class="search-field" name="is-admin-field">
+                        <select class="search-field" name="evaluation-result" style="padding: 12px">
                             <option value=""></option>
                             <option value="0">Successful</option>
                             <option value="1">Unsuccessful</option>
                         </select>
                     </label>
+
                     <button class="btn btn-light" type="submit" formaction="<?= $link->url("home.database") ?>">
                         Search
                     </button>
