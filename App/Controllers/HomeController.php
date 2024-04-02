@@ -193,11 +193,13 @@ class HomeController extends AControllerBase
         $points = $this->validateCheckpoints();
         $tracks = $this->validateTracks();
 
-        if (!empty($points['invalidPoints'] || !empty($tracks['invalidTracks']))) {
+        if (!empty($points['invalidPoints'] || !empty($tracks['invalidRows']) || !empty($tracks['invalidColumns']))) {
             $messagePoints = !empty($points['invalidPoints']) ?
                 "Invalid points: " . implode(', ', $points['invalidPoints']) . "\n" : "";
-            $messageTracks = !empty($tracks['invalidTracks']) ?
-                "Invalid tracks: " . implode(', ', $tracks['invalidTracks']) . "\n" : "";
+            $messageRows = !empty($tracks['invalidRows']) ?
+                "Invalid rows: " . implode(', ', $tracks['invalidRows']) . "\n" : "";
+            $messageColumns = !empty($tracks['invalidColumns']) ?
+                "Invalid columns: " . implode(', ', $tracks['invalidColumns']) . "\n" : "";
 
             $data = [
                 "step" => 2,
@@ -207,7 +209,8 @@ class HomeController extends AControllerBase
                 "drones" => $tracks['drones'],
                 "tracks" => $tracks['tracks'],
                 "message-points" => $messagePoints,
-                "message-tracks" => $messageTracks
+                "message-rows" => $messageRows,
+                "message-columns" => $messageColumns
             ];
 
             return $this->redirect($this->url("home.index", $data));
@@ -232,11 +235,13 @@ class HomeController extends AControllerBase
         $points = $this->validateCheckpoints();
         $tracks = $this->validateTracks();
 
-        if (!empty($points['invalidPoints'] || !empty($tracks['invalidTracks']))) {
+        if (!empty($points['invalidPoints'] || !empty($tracks['invalidRows']) || !empty($tracks['invalidColumns']))) {
             $messagePoints = !empty($points['invalidPoints']) ?
                 "Invalid points: " . implode(', ', $points['invalidPoints']) . "\n" : "";
-            $messageTracks = !empty($tracks['invalidTracks']) ?
-                "Invalid tracks: " . implode(', ', $tracks['invalidTracks']) . "\n" : "";
+            $messageRows = !empty($tracks['invalidRows']) ?
+                "Invalid rows: " . implode(', ', $tracks['invalidRows']) . "\n" : "";
+            $messageColumns = !empty($tracks['invalidColumns']) ?
+                "Invalid columns: " . implode(', ', $tracks['invalidColumns']) . "\n" : "";
 
             $data = [
                 "step" => 2,
@@ -246,7 +251,8 @@ class HomeController extends AControllerBase
                 "drones" => $tracks['drones'],
                 "tracks" => $tracks['tracks'],
                 "message-points" => $messagePoints,
-                "message-tracks" => $messageTracks
+                "message-rows" => $messageRows,
+                "message-columns" => $messageColumns
             ];
 
             return $this->redirect($this->url("home.index", $data));
@@ -291,25 +297,42 @@ class HomeController extends AControllerBase
     private function validateTracks(): array
     {
         $formData = $this->app->getRequest();
+        $type = $formData->getValue("mission-type");
         $drones = $formData->getValue("drones-count");
         $checkpoints = $formData->getValue("checkpoints-count");
         $tracks = [];
-        $invalidTracks = [];
+        $invalidRows = [];
+        $invalidColumns = [];
 
-        for ($i = 0; $i < $drones; $i++) {
-            $sum = 0;
+        if ($type == "S") {
+            for ($i = 0; $i < $checkpoints; $i++) {
+                $sum = 0;
 
-            for ($j = 0; $j < $checkpoints; $j++) {
-                $tracks[$i][$j] = $formData->getValue("has-$i-$j") ?? 0;
-                $sum += (int)($tracks[$i][$j] ?? 0);
+                for ($j = 0; $j < $drones; $j++) {
+                    $tracks[$j][$i] = $formData->getValue("has-$j-$i") ?? 0;
+                    $sum += (int)($tracks[$j][$i] ?? 0);
+                }
+
+                if ($sum <= 0) {
+                    $invalidColumns[] = $i;
+                }
             }
+        } else {
+            for ($i = 0; $i < $drones; $i++) {
+                $sum = 0;
 
-            if ($sum <= 0) {
-                $invalidTracks[] = $i;
+                for ($j = 0; $j < $checkpoints; $j++) {
+                    $tracks[$i][$j] = $formData->getValue("has-$i-$j") ?? 0;
+                    $sum += (int)($tracks[$i][$j] ?? 0);
+                }
+
+                if ($sum <= 0) {
+                    $invalidRows[] = $i;
+                }
             }
         }
 
-        return ['tracks' => $tracks, 'invalidTracks' => $invalidTracks, 'drones' => $drones];
+        return ['tracks' => $tracks, 'invalidRows' => $invalidRows, 'invalidColumns' => $invalidColumns, 'drones' => $drones];
     }
 
     public function calculateMissionReliability($drones, $tracks, $points): float

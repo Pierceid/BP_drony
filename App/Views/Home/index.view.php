@@ -53,7 +53,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <tr>
                     <th style="width: 160px">Prob.\Point</th>
                     <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
-                        <th><?= $j ?>.</th>
+                        <th>P(<?= $j ?>)</th>
                     <?php endfor ?>
                 </tr>
                 </thead>
@@ -131,9 +131,15 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             </table>
         <?php endif ?>
 
-        <?php if (isset($_GET['message-tracks'])) : ?>
+        <?php if (isset($_GET['message-rows'])) : ?>
             <h5 style="color: red">
-                <?= $_GET['message-tracks'] ?>
+                <?= $_GET['message-rows'] ?>
+            </h5>
+        <?php endif ?>
+
+        <?php if (isset($_GET['message-columns'])) : ?>
+            <h5 style="color: red">
+                <?= $_GET['message-columns'] ?>
             </h5>
         <?php endif ?>
 
