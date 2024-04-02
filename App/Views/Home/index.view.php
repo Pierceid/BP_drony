@@ -62,6 +62,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <?php for ($i = 0; $i < 3; $i++) : ?>
                     <tr>
                         <th>p(<?= $i ?>)</th>
+
                         <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
                             <td>
                                 <?php if ($i === 0) : ?>
@@ -106,24 +107,21 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                 <tbody>
                 <?php for ($i = 0; $i < $drones; $i++) : ?>
                     <tr>
-                        <th>D(<?= $i ?>)</
-                        <th>
+                        <th>D(<?= $i ?>)</th>
 
-                            <?php for ($j = 0;
-                            $j < $checkpoints;
-                            $j++) : ?>
-                        <td>
-                            <label>
-                                <select name="has-<?= $i ?>-<?= $j ?>" style="padding: 4px 0">
-                                    <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>
-                                        0
-                                    </option>
-                                    <option value="1" <?php echo (($tracks[$i][$j] ?? 0) === '1') ? 'selected' : '' ?>>
-                                        1
-                                    </option>
-                                </select>
-                            </label>
-                        </td>
+                        <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
+                            <td>
+                                <label>
+                                    <select name="has-<?= $i ?>-<?= $j ?>" style="padding: 4px 0">
+                                        <option value="0" <?php echo (($tracks[$i][$j] ?? 0) === '0') ? 'selected' : '' ?>>
+                                            0
+                                        </option>
+                                        <option value="1" <?php echo (($tracks[$i][$j] ?? 0) === '1') ? 'selected' : '' ?>>
+                                            1
+                                        </option>
+                                    </select>
+                                </label>
+                            </td>
                         <?php endfor ?>
                     </tr>
                 <?php endfor ?>

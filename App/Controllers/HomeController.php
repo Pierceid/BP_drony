@@ -286,7 +286,7 @@ class HomeController extends AControllerBase
             $points[$i][2] = 1 - $points[$i][0] - $points[$i][1];
             $sum = $points[$i][0] + $points[$i][1] + $points[$i][2];
 
-            if ($sum != 1 || $points[$i][2] < 0) {
+            if (round($sum) != 1 || $points[$i][2] < 0) {
                 $invalidPoints[] = $i;
             }
         }
@@ -378,10 +378,12 @@ class HomeController extends AControllerBase
 
     public function findCommonCheckpoints($tracks)
     {
-        $common = [];
-        foreach ($tracks as $track) {
-            $common = isset($common) ? array_intersect($common, $track) : $track;
+        $common = $tracks[0];
+
+        for ($i = 1; $i < count($tracks); $i++) {
+            $common = array_intersect($common, $tracks[$i]);
         }
+
         return $common;
     }
 
