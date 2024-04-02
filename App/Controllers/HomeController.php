@@ -317,18 +317,18 @@ class HomeController extends AControllerBase
                     $invalidColumns[] = $i;
                 }
             }
-        } else {
-            for ($i = 0; $i < $drones; $i++) {
-                $sum = 0;
+        }
 
-                for ($j = 0; $j < $checkpoints; $j++) {
-                    $tracks[$i][$j] = $formData->getValue("has-$i-$j") ?? 0;
-                    $sum += (int)($tracks[$i][$j] ?? 0);
-                }
+        for ($i = 0; $i < $drones; $i++) {
+            $sum = 0;
 
-                if ($sum <= 0) {
-                    $invalidRows[] = $i;
-                }
+            for ($j = 0; $j < $checkpoints; $j++) {
+                $tracks[$i][$j] = $formData->getValue("has-$i-$j") ?? 0;
+                $sum += (int)($tracks[$i][$j] ?? 0);
+            }
+
+            if ($sum <= 0) {
+                $invalidRows[] = $i;
             }
         }
 
