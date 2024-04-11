@@ -258,7 +258,7 @@ class HomeController extends AControllerBase
             return $this->redirect($this->url("home.index", $data));
         }
 
-        $evaluation = $this->calculateMissionReliability($tracks['drones'], $tracks['tracks'], $points['points']);
+        $evaluation = $this->calculateMissionReliability($tracks['tracks'], $points['points'], $type);
 
         $data = [
             "step" => 3,
@@ -310,7 +310,7 @@ class HomeController extends AControllerBase
 
                 for ($j = 0; $j < $drones; $j++) {
                     $tracks[$j][$i] = $formData->getValue("has-$j-$i") ?? 0;
-                    $sum += (int)($tracks[$j][$i] ?? 0);
+                    $sum += (int)$tracks[$j][$i];
                 }
 
                 if ($sum <= 0) {
@@ -324,7 +324,7 @@ class HomeController extends AControllerBase
 
             for ($j = 0; $j < $checkpoints; $j++) {
                 $tracks[$i][$j] = $formData->getValue("has-$i-$j") ?? 0;
-                $sum += (int)($tracks[$i][$j] ?? 0);
+                $sum += (int)$tracks[$i][$j];
             }
 
             if ($sum <= 0) {
@@ -335,56 +335,33 @@ class HomeController extends AControllerBase
         return ['tracks' => $tracks, 'invalidRows' => $invalidRows, 'invalidColumns' => $invalidColumns, 'drones' => $drones];
     }
 
-    public function calculateMissionReliability($drones, $tracks, $points): float
+    public function calculateMissionReliability($tracks, $points, $type): float
     {
-        $R = [];
-        $commonCheckpoints = $this->findCommonCheckpoints($tracks);
+        $R = 1.0;
+        $F = 1.0;
+        $commonCheckPoints = array_fill(0, count($points), 0);
 
-        for ($i = 0; $i < $drones; $i++) {
-            if (in_array($tracks[$i], $commonCheckpoints)) {
-                $random = mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX;
-                $weight = $random < $points[$i][0] ? $points[$i][0] :
-                    ($random < $points[$i][0] + $points[$i][1] ? $points[$i][1] : $points[$i][2]);
-                $R[] = $weight;
-            }
-        }
-
-        if (!empty($R)) {
-            $R_common = max($R);
-            $R_series = 1.0;
-
-            for ($i = 0; $i < $drones; $i++) {
-                if (!in_array($tracks[$i], $commonCheckpoints)) {
-                    $random = mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX;
-                    $weight = $random < $points[$i][0] ? $points[$i][0] :
-                        ($random < $points[$i][0] + $points[$i][1] ? $points[$i][1] : $points[$i][2]);
-                    $R_series *= $weight;
+        if ($type == 'S') {
+            foreach ($tracks as $track) {
+                foreach ($track as $faultIndex => $fault) {
+                    if ($fault == 1) {
+                        $commonCheckPoints[$faultIndex] += 1;
+                    }
                 }
             }
-
-            return $R_common * $R_series;
         }
 
-        $R_series = 0.0;
-        for ($i = 0; $i < $drones; $i++) {
-            $random = mt_rand(0, PHP_INT_MAX) / PHP_INT_MAX;
-            $weight = $random < $points[$i][0] ? $points[$i][0] :
-                ($random < $points[$i][0] + $points[$i][1] ? $points[$i][1] : $points[$i][2]);
-            $R_series += $weight;
+        foreach ($tracks as $track) {
+            foreach ($track as $faultIndex => $fault) {
+                if ($fault == 1) {
+                    $faultDataProbability = $points[$faultIndex][0];
+                    $power = ($type == 'S') ? $commonCheckPoints[$faultIndex] : 1;
+                    $F *= (float) pow($faultDataProbability, $power);
+                }
+            }
         }
 
-        return $R_series;
-    }
-
-    public function findCommonCheckpoints($tracks)
-    {
-        $common = $tracks[0];
-
-        for ($i = 1; $i < count($tracks); $i++) {
-            $common = array_intersect($common, $tracks[$i]);
-        }
-
-        return $common;
+        return $R - $F;
     }
 
     private function findUser(): ?User

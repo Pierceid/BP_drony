@@ -73,8 +73,7 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
                                 <?php elseif ($i === 1) : ?>
                                     <label style="display:inline;">
                                         <input name="acceptable-point-<?= $j ?>" type="number" step="any" min="0"
-                                               max="1"
-                                               placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
+                                               max="1" placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
                                     </label>
                                 <?php elseif ($i === 2) : ?>
                                     <h6 style="display:inline;"><?= $points[$j][$i] ?? 0 ?></h6>
@@ -141,7 +140,9 @@ $destination = $step == 0 ? 'home.setBaseParameters' : ($step == 1 ? 'home.setPr
             </h5>
         <?php endif ?>
 
-        <h3>Evaluation: <?= $_GET['evaluation'] ?? '0.0' ?></h3>
+        <?php if ($step >= 3) : ?>
+            <h3>Evaluation: <?= number_format($evaluation * 100, 2) ?> %</h3>
+        <?php endif ?>
 
         <div class="action-buttons">
             <button class="btn-submit" type="submit" formaction="<?= $link->url('home.index') ?>">Cancel</button>
