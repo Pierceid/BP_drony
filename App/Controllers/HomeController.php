@@ -33,6 +33,7 @@ class HomeController extends AControllerBase
         $userId = $formData->getValue("user-id");
         $missionId = $formData->getValue("mission-id");
         $data = ["option-id" => $optionId, "user-id" => $userId, "mission-id" => $missionId];
+
         return $this->html($data);
     }
 
@@ -47,7 +48,6 @@ class HomeController extends AControllerBase
         $passwordOld = $formData->getValue("password-old");
         $passwordNew = $formData->getValue("password-new");
         $destination = $optionId == "3" ? "user.index" : ($optionId == "4" ? "home.database" : "home.execute");
-
         $message = match ($optionId) {
             "0" => $this->handleInput(nameNew: $nameNew),
             "1" => $this->handleInput(emailNew: $emailNew),
@@ -56,8 +56,13 @@ class HomeController extends AControllerBase
             "4" => $this->removeMission(missionId: $missionId),
             default => "Invalid option!",
         };
+        $data = [
+            "option-id" => $optionId,
+            "user-id" => $userId,
+            "mission-id" => $missionId,
+            "message" => $message
+        ];
 
-        $data = ["option-id" => $optionId, "user-id" => $userId, "mission-id" => $missionId, "message" => $message];
         return $this->redirect($this->url($destination, $data));
     }
 
@@ -106,6 +111,7 @@ class HomeController extends AControllerBase
         $currentUser->setLogin($nameNew);
         $currentUser->save();
         $_SESSION['user'] = $nameNew;
+
         return "Your name has been successfully updated!";
     }
 
@@ -116,12 +122,14 @@ class HomeController extends AControllerBase
             return $user !== $currentUser && $user->getEmail() == $emailNew;
         });
 
-        if (!empty($existingUser) || $emailNew == $currentUser->getEmail() || empty($emailNew) || strlen($emailNew) > 200) {
+        if (!empty($existingUser) || $emailNew == $currentUser->getEmail() ||
+            empty($emailNew) || strlen($emailNew) > 200) {
             return "Failed to update your email!";
         }
 
         $currentUser->setEmail($emailNew);
         $currentUser->save();
+
         return "Your email has been successfully updated!";
     }
 
@@ -134,6 +142,7 @@ class HomeController extends AControllerBase
 
         $currentUser->setPassword(password_hash($passwordNew, PASSWORD_DEFAULT));
         $currentUser->save();
+
         return "Your password has been successfully updated!";
     }
 
@@ -143,7 +152,6 @@ class HomeController extends AControllerBase
         $checkpoints = $formData->getValue("checkpoints-count");
         $drones = $formData->getValue("drones-count");
         $type = $formData->getValue("mission-type");
-
         $data = [
             "step" => 1,
             "checkpoints" => $checkpoints,
@@ -200,7 +208,6 @@ class HomeController extends AControllerBase
                 "Invalid rows: " . implode(', ', $tracks['invalidRows']) . "\n" : "";
             $messageColumns = !empty($tracks['invalidColumns']) ?
                 "Invalid columns: " . implode(', ', $tracks['invalidColumns']) . "\n" : "";
-
             $data = [
                 "step" => 2,
                 "checkpoints" => $points['checkpoints'],
@@ -242,7 +249,6 @@ class HomeController extends AControllerBase
                 "Invalid rows: " . implode(', ', $tracks['invalidRows']) . "\n" : "";
             $messageColumns = !empty($tracks['invalidColumns']) ?
                 "Invalid columns: " . implode(', ', $tracks['invalidColumns']) . "\n" : "";
-
             $data = [
                 "step" => 2,
                 "checkpoints" => $points['checkpoints'],
@@ -260,8 +266,15 @@ class HomeController extends AControllerBase
 
         $evaluation = $this->calculateMissionReliability($tracks['tracks'], $points['points'], $type);
 
+        $mission = new Mission();
+        $mission->setDrones($tracks['drones']);
+        $mission->setCheckpoints($points['checkpoints']);
+        $mission->setType($type);
+        $mission->setEvaluation($evaluation);
+        $mission->save();
+
         $data = [
-            "step" => 3,
+            "step" => 4,
             "checkpoints" => $points['checkpoints'],
             "points" => $points['points'],
             "type" => $type,
@@ -356,22 +369,24 @@ class HomeController extends AControllerBase
                 if ($fault == 1) {
                     $faultDataProbability = $points[$faultIndex][0];
                     $power = ($type == 'S') ? $commonCheckPoints[$faultIndex] : 1;
-                    $F *= (float) pow($faultDataProbability, $power);
+                    $F *= (float)pow($faultDataProbability, $power);
                 }
             }
         }
 
-        return $R - $F;
+        return number_format(($R - $F) * 100, 2);
     }
 
     private function findUser(): ?User
     {
         $users = User::getAll();
+
         foreach ($users as $user) {
             if ($user->getLogin() == $this->app->getAuth()->getLoggedUserName()) {
                 return $user;
             }
         }
+
         return null;
     }
 }
