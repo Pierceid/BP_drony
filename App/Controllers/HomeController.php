@@ -274,7 +274,7 @@ class HomeController extends AControllerBase
         $mission->save();
 
         $data = [
-            "step" => 4,
+            "step" => 3,
             "checkpoints" => $points['checkpoints'],
             "points" => $points['points'],
             "type" => $type,
@@ -295,11 +295,10 @@ class HomeController extends AControllerBase
 
         for ($i = 0; $i < $checkpoints; $i++) {
             $points[$i][0] = (double)($formData->getValue("fault-point-$i") ?? 0);
-            $points[$i][1] = (double)($formData->getValue("acceptable-point-$i") ?? 0);
-            $points[$i][2] = 1 - $points[$i][0] - $points[$i][1];
-            $sum = $points[$i][0] + $points[$i][1] + $points[$i][2];
+            $points[$i][1] = 1 - $points[$i][0];
+            $sum = $points[$i][0] + $points[$i][1];
 
-            if (round($sum) != 1 || $points[$i][2] < 0) {
+            if (round($sum) != 1 || $points[$i][1] < 0) {
                 $invalidPoints[] = $i;
             }
         }
@@ -350,34 +349,65 @@ class HomeController extends AControllerBase
 
     public function calculateMissionReliability($tracks, $points, $type): float
     {
-        $R = 1.0;
-        $F = 1.0;
-        $commonCheckPoints = array_fill(0, count($points), 0);
+        if ($type === 'S') {
+            $reliability = $this->calculateSeriesMissionReliability($tracks, $points);
+        } elseif ($type === 'P') {
+            $reliability = $this->calculateParallelMissionReliability($tracks, $points);
+        } else {
+            $reliability = 0.0;
+        }
 
-        if ($type == 'S') {
-            foreach ($tracks as $track) {
-                foreach ($track as $faultIndex => $fault) {
-                    if ($fault == 1) {
-                        $commonCheckPoints[$faultIndex] += 1;
-                    }
+        return number_format($reliability * 100, 2);
+    }
+
+    private function calculateSeriesMissionReliability($tracks, $points): float
+    {
+        $R = 1.0;
+        $commonPoints = array_fill(0, count($points), 0);
+
+        foreach ($tracks as $track) {
+            foreach ($track as $index => $value) {
+                if ($value == 1) {
+                    $commonPoints[$index]++;
                 }
             }
         }
 
         foreach ($tracks as $track) {
-            foreach ($track as $faultIndex => $fault) {
-                if ($fault == 1) {
-                    $faultDataProbability = $points[$faultIndex][0];
-                    $power = ($type == 'S') ? $commonCheckPoints[$faultIndex] : 1;
-                    $F *= (float)pow($faultDataProbability, $power);
+            foreach ($track as $index => $value) {
+                if ($value == 1) {
+                    if ($commonPoints[$index] == 1) {
+                        $R *= (float)$points[$index][1]; // Probability of great data
+                    } else {
+                        $R *= (1.0 - (float)pow($points[$index][0], $commonPoints[$index])); // 1 - probability of only fault data
+                    }
                 }
             }
         }
 
-        return number_format(($R - $F) * 100, 2);
+        return $R;
     }
 
-    private function findUser(): ?User
+    private function calculateParallelMissionReliability($tracks, $points): float
+    {
+        $R = 1.0;
+        $F = 1.0;
+
+        foreach ($tracks as $track) {
+            $success = 1.0;
+            foreach ($track as $index => $value) {
+                if ($value == 1) {
+                    $success *= (float)$points[$index][1]; // Probability of great data
+                }
+            }
+            $F *= (1 - $success);
+        }
+
+        return $R - $F;
+    }
+
+    private
+    function findUser(): ?User
     {
         $users = User::getAll();
 

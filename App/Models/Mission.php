@@ -10,7 +10,7 @@ class Mission extends Model
     protected ?int $drones;
     protected ?int $checkpoints;
     protected ?string $type;
-    protected ?int $evaluation;
+    protected ?float $evaluation;
 
     public function getId(): ?int
     {
@@ -47,12 +47,12 @@ class Mission extends Model
         $this->type = $type;
     }
 
-    public function getEvaluation(): ?int
+    public function getEvaluation(): ?float
     {
         return $this->evaluation;
     }
 
-    public function setEvaluation(?int $evaluation): void
+    public function setEvaluation(?float $evaluation): void
     {
         $this->evaluation = $evaluation;
     }

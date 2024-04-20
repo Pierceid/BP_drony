@@ -61,9 +61,9 @@ $serializedTracks = serialize($tracks);
                 </thead>
 
                 <tbody>
-                <?php for ($i = 0; $i < 3; $i++) : ?>
+                <?php for ($i = 0; $i < 2; $i++) : ?>
                     <tr>
-                        <th>p(<?= $i ?>)</th>
+                        <th>p(<?= ($i === 0) ? "fault" : "great" ?>)</th>
 
                         <?php for ($j = 0; $j < $checkpoints; $j++) : ?>
                             <td>
@@ -73,11 +73,6 @@ $serializedTracks = serialize($tracks);
                                                placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
                                     </label>
                                 <?php elseif ($i === 1) : ?>
-                                    <label style="display:inline;">
-                                        <input name="acceptable-point-<?= $j ?>" type="number" step="any" min="0"
-                                               max="1" placeholder="P(<?= $j ?>)" value="<?= $points[$j][$i] ?? 0 ?>">
-                                    </label>
-                                <?php elseif ($i === 2) : ?>
                                     <h6 style="display:inline;"><?= $points[$j][$i] ?? 0 ?></h6>
                                 <?php endif ?>
                             </td>

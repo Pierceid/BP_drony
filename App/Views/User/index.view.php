@@ -20,7 +20,7 @@ $signInMessage = $_GET['sign-in-message'] ?? '';
 <head>
     <meta charset="UTF-8">
 
-    <title>Pizza Pro</title>
+    <title>Drone Missions</title>
 
     <link rel="stylesheet" href="/public/css/styl_user.css">
 
