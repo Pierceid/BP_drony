@@ -25,12 +25,14 @@ $missions = $data['missions'] ?? [];
             <form class="form" method="post">
                 <div class="search">
                     <label>
-                        <input class="search-field" name="min-evaluation-field" type="number" placeholder="Min evaluation"
+                        <input class="search-field" name="min-evaluation-field" type="number"
+                               placeholder="Min evaluation"
                                min="0" step="any" max="100" value="<?= $min ?>">
                     </label>
 
                     <label>
-                        <input class="search-field" name="max-evaluation-field" type="number" placeholder="Max evaluation"
+                        <input class="search-field" name="max-evaluation-field" type="number"
+                               placeholder="Max evaluation"
                                min="0" step="any" max="100" value="<?= $max ?>">
                     </label>
 
@@ -43,7 +45,8 @@ $missions = $data['missions'] ?? [];
                     </label>
 
                     <button class="btn btn-light" type="submit" style="height: 40px"
-                            formaction="<?= $link->url("home.database", ["min" => $min, "max" => $max, "type" => $type]) ?>">                       Search
+                            formaction="<?= $link->url("home.database", ["min" => $min, "max" => $max, "type" => $type]) ?>">
+                        Search
                     </button>
                 </div>
 
@@ -55,7 +58,9 @@ $missions = $data['missions'] ?? [];
                         <th>Checkpoints</th>
                         <th>Type</th>
                         <th>Evaluation</th>
-                        <th>Action</th>
+                        <?php if ($isAdmin) : ?>
+                            <th>Action</th>
+                        <?php endif ?>
                     </tr>
                     </thead>
 
@@ -69,13 +74,15 @@ $missions = $data['missions'] ?? [];
                                 <td><?= $mission['type'] ?></td>
                                 <td><?= $mission['evaluation'] ?></td>
 
-                                <td>
-                                    <button type="button" class="btn btn-danger">
-                                        <a href="<?= $link->url("home.execute", ["option-id" => 4, "mission-id" => $mission['id']]) ?>">
-                                            Remove
-                                        </a>
-                                    </button>
-                                </td>
+                                <?php if ($isAdmin) : ?>
+                                    <td>
+                                        <button type="button" class="btn btn-danger">
+                                            <a href="<?= $link->url("home.execute", ["option-id" => 4, "mission-id" => $mission['id']]) ?>">
+                                                Remove
+                                            </a>
+                                        </button>
+                                    </td>
+                                <?php endif ?>
                             </tr>
                         <?php endforeach ?>
                     <?php endif ?>
