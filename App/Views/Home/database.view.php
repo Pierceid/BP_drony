@@ -10,6 +10,10 @@
 <link rel="stylesheet" href="/public/css/styl_database.css">
 
 <?php
+$min = $data['min'] ?? '';
+$max = $data['max'] ?? '';
+$type = $data['type'] ?? '';
+$isAdmin = $data['is-admin'] ?? 0;
 $missions = $data['missions'] ?? [];
 ?>
 
@@ -20,19 +24,26 @@ $missions = $data['missions'] ?? [];
 
             <form class="form" method="post">
                 <div class="search">
-                    <input class="search-field" name="login-field" type="search" placeholder="ID"
-                           aria-label="Search" style="padding: 8px">
+                    <label>
+                        <input class="search-field" name="min-evaluation-field" type="number" placeholder="Min evaluation"
+                               min="0" step="any" max="100" value="<?= $min ?>">
+                    </label>
 
                     <label>
-                        <select class="search-field" name="evaluation-result" style="padding: 12px">
-                            <option value=""></option>
-                            <option value="0">Successful</option>
-                            <option value="1">Unsuccessful</option>
+                        <input class="search-field" name="max-evaluation-field" type="number" placeholder="Max evaluation"
+                               min="0" step="any" max="100" value="<?= $max ?>">
+                    </label>
+
+                    <label>
+                        <select class="search-field" name="mission-type-field">
+                            <option value="">All types</option>
+                            <option value="S" <?php if ($type === 'S') echo 'selected' ?>>Serial</option>
+                            <option value="P" <?php if ($type === 'P') echo 'selected' ?>>Parallel</option>
                         </select>
                     </label>
 
-                    <button class="btn btn-light" type="submit" formaction="<?= $link->url("home.database") ?>">
-                        Search
+                    <button class="btn btn-light" type="submit" style="height: 40px"
+                            formaction="<?= $link->url("home.database", ["min" => $min, "max" => $max, "type" => $type]) ?>">                       Search
                     </button>
                 </div>
 
@@ -72,7 +83,7 @@ $missions = $data['missions'] ?? [];
                 </table>
 
                 <?php if (empty($missions)) : ?>
-                    <h5 style="color: red">0 results found</h5>
+                    <h5 style="color: red">No results found</h5>
                 <?php endif ?>
             </form>
         </div>

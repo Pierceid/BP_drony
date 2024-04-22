@@ -22,7 +22,12 @@ class HomeController extends AControllerBase
 
     public function database(): Response
     {
-        $data = ["missions" => []];
+        $formData = $this->app->getRequest();
+        $data["min"] = $formData->getValue("min-evaluation-field");
+        $data["max"] = $formData->getValue("max-evaluation-field");
+        $data["type"] = $formData->getValue("mission-type-field");
+        $data["is-admin"] = $this->findUser()->getIsAdmin();
+        $data["missions"] = $this->getMissions();
         return $this->html($data);
     }
 
@@ -406,8 +411,7 @@ class HomeController extends AControllerBase
         return $R - $F;
     }
 
-    private
-    function findUser(): ?User
+    private function findUser(): ?User
     {
         $users = User::getAll();
 
@@ -418,5 +422,39 @@ class HomeController extends AControllerBase
         }
 
         return null;
+    }
+
+    private function getMissions(): array {
+        $formData = $this->app->getRequest();
+        $min = $formData->getValue('min-evaluation-field') ?? '';
+        $max = $formData->getValue('max-evaluation-field') ?? '';
+        $type = $formData->getValue('mission-type-field') ?? '';
+        $sql = "`type` LIKE ?";
+        $parameters = ["%$type%"];
+
+        if (!empty($min)) {
+            $sql .= " AND `evaluation` > ?";
+            $parameters[] = "$min";
+        }
+
+        if (!empty($max) && $max >= $min) {
+            $sql .= " AND `evaluation` < ?";
+            $parameters[] = "$max";
+        }
+
+        $missions = Mission::getAll($sql, $parameters);
+        $data = [];
+
+        if (count($missions) > 0) {
+            for ($i = 0; $i < count($missions); $i++) {
+                $data[$i]['id'] = $missions[$i]->getId();
+                $data[$i]['drones'] = $missions[$i]->getDrones();
+                $data[$i]['checkpoints'] = $missions[$i]->getCheckpoints();
+                $data[$i]['type'] = $missions[$i]->getType();
+                $data[$i]['evaluation'] = $missions[$i]->getEvaluation();
+            }
+        }
+
+        return $data;
     }
 }

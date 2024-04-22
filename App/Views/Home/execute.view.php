@@ -29,7 +29,6 @@ $header = $optionId == 0 ? 'Edit name' : ($optionId == 1 ? 'Edit email' : ($opti
     <input type="hidden" name="mission-id" value="<?= $missionId ?>"/>
 
     <h2 class="title"><?= $header ?></h2>
-    <h5 class="message">User: <?= $name ?></h5>
 
     <label>
         <?php if ($optionId == 0) : ?>
